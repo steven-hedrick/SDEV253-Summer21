@@ -19,7 +19,8 @@ function do_html_header($title) {
   </head>
   <body>
   <div>
-    <img src="bookmark.gif" alt="PHPbookmark logo" height="55" width="57" style="float: left; padding-right: 6px;" />
+    <img src="bookmark.gif" alt="PHPbookmark logo" height="55" width="57" 
+	style="float: left; padding-right: 6px;" />
       <h1>PHPbookmark</h1>
   </div>
   <hr />

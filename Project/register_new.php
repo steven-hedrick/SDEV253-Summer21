@@ -6,7 +6,7 @@ require_once('bookmark_fns.php');
 $email=$_POST['email'];
 $username=$_POST['username'];
 $passwd=$_POST['passwd'];
-$passwd2=$_POST['passwrd2'];
+$passwd2=$_POST['passwd2'];
 // start session which may be needed later
 // start it now because it must go before headers
 
@@ -17,7 +17,7 @@ try {
         throw new Exception('You have not filled the form out correctly - please go back and try again.');
     }
     // email address not valid
-    if (!valid_email($_POST)) {
+    if (!valid_email($email)) {
         throw new Exception('That is not a valid email address. Please go back and try again.');
     }
     // passwords not the same

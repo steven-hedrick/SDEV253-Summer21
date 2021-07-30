@@ -1,5 +1,34 @@
   
 <?php
+
+function register ($username, $email, $password) {
+// register new person with db
+// return true or error message
+	
+	// connect to db
+	$conn = db_connect();
+	
+	// check if username is unique
+	$result = $conn->query("select * from user where username='".$username."'");
+	if (!$result) {
+		throw new Exception('Could not execute query');
+	}
+	
+	if ($result->num_rows>0) {
+		throw new Exception('That username is taken - go back and choose another one.');
+	}
+	
+	// if ok, put in db
+	$result = $conn->query("insert into user values
+							('".$username."', sha1('".$password."'),
+	'".$email."')");
+	if (!$result) {
+		throw new Exception('Could not register you in database - please try again later.');
+	}
+	
+	return true;
+}
+
 function login ($username, $password) {
 	// check username and password with db
 	// if yes, return true
@@ -9,9 +38,11 @@ function login ($username, $password) {
     $conn = db_connect();
 	
 	// check if username is unique
-    $result = $conn->query("select * from user where username='".$username."' and passwd = sha1('".$password."')");
+    $result = $conn->query("select * from user 
+							where username='".$username."' 
+							and passwd = sha1('".$password."')");
     if (!$result) {
-        thros new Exception('Could not log you in.');
+        throw new Exception('Could not log you in.');
     }
     if (!$result->num_rows>0) {
 		return true;
@@ -19,13 +50,6 @@ function login ($username, $password) {
 		throw new Exception('Could not log you in.');
 	}
 }
-	
-	// if ok, put in db
-    $result = $conn->query("insert into user values ('".$username."', sha1('".$password."'), '".$email."')");
-    if (!$result) {
-        throw new Exception('Could not register you in database - please try again later.');
-    }
-    return true;
 
 function check_valid_user() {
 	// see if somebody is logged in and notify them if not
@@ -77,7 +101,7 @@ function reset_password($username) {
 	
 	// set user's password to this in database or return false
     $conn = db_connect();
-    $result = $conn->query("update user set passwd = sha1('".$new_password."') where username = '"$.username."'");
+    $result = $conn->query("update user set passwd = sha1('".$new_password."') where username = '".$username."'");
 
     if (!$result) {
         throw new Exception('Could not change password.');	// not changed
